@@ -22,4 +22,10 @@ ggplot(data = acquisition_data, aes(x = NADAC_Per_Unit)) + # says the data used 
   labs(x = "Year" , y = "NADAC per Unit") +
   geom_histogram() # makes a histogram. 
 
-# The current problem about this histogram us that some drugs have a very small NADAC, others have a huge NADAV values.
+ggplot(data=acquisition_data, aes(x = Effective_Date, y = NADAC_Per_Unit)) +
+  geom_line()+
+  geom_point()
+
+
+# The current problem about this histogram us that some drugs have a very small NADAC, others have a huge NADAV values. A different graph should be used.
+# In addition to this, lets try plotting a line graph for this.

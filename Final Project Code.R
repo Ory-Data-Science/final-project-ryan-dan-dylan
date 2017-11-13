@@ -37,7 +37,7 @@ Albuterol_data_2.5 <- Adderall_data %>%                                        #
 # Albuterol_data_2.5[order(as.Date(Albuterol_data_2.5$Effective_Date , format="%d/%m/%Y")),,drop=FALSE]
   
 Albuterol_data_2.5$Effective_Date <- mdy(Albuterol_data_2.5$Effective_Date)
-Albuterol_data_2.5 <- arrange(Albuterol_data_2.5 , desc(Effective_Date))
+Albuterol_data_2.5 <- arrange(Albuterol_data_2.5 , (Effective_Date))
 
 
 
@@ -45,6 +45,12 @@ Albuterol_data_2.5 <- arrange(Albuterol_data_2.5 , desc(Effective_Date))
 #Albuterol_data_2.5[order(as.Date(Albuterol_data_2.5$Effective_Date, format="%d/%m/%Y")),, drop=FALSE]
 
 print(Albuterol_data_2.5) 
+
+
+ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit)) + geom_line()
+
+# ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit)) + geom_line() +
+#  scale_x_date(format = "%b-%Y") + xlab("") + ylab("NADAC Per Unit")
 
 
 

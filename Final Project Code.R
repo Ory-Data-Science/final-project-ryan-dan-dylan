@@ -13,7 +13,7 @@ print(acquisition_data) # Determining the drugs that are being analyzed.
 
 Adderall_data <- acquisition_data %>% # This data is going to separate Adderall from the other drugs to work with
   select(NDC_Description , Effective_Date, NADAC_Per_Unit, NDC)  %>%  #Select is used to choose the columns you want to work with
-  filter(str_detect(NDC_Description, "ADDERALL|AMOXICILLIN|ALBUTEROL"))  # You can add several drugs in this str_detect with this | symbol
+  filter(str_detect(NDC_Description, "ADDERALL|AMOXICILLIN|ALBUTEROL|PENICILLIN"))  # You can add several drugs in this str_detect with this | symbol
 
 
 

@@ -4,6 +4,8 @@ library("dplyr")
 library(stringr)
 library(lubridate)
 library(plyr)
+library(scales)
+library(ggplot2)
 
 acquisition_data <- read_csv('NADAC__National_Average_Drug_Acquisition_Cost_.csv') # Important to note that this data is from 2013 - 2017.
 
@@ -34,24 +36,36 @@ print(Adderall_data)
 Albuterol_data_2.5 <- Adderall_data %>%                                        # Defined array for one particular drug.
    filter(Manufacturer_Code == "76204", Product_Code == "0200", Packaging_Code == "60")  # Filters the columns based on this 
 
+Adderall <- Adderall_data %>%
+  filter(Manufacturer_Code == "57844", Product_Code == "0110", Packaging_Code == "01")
+
+
 # Albuterol_data_2.5[order(as.Date(Albuterol_data_2.5$Effective_Date , format="%d/%m/%Y")),,drop=FALSE]
   
 Albuterol_data_2.5$Effective_Date <- mdy(Albuterol_data_2.5$Effective_Date)
 Albuterol_data_2.5 <- arrange(Albuterol_data_2.5 , (Effective_Date))
 
-
+Adderall$Effective_Date <- mdy(Adderall$Effective_Date)
+Adderall <- arrange(Adderall , (Effective_Date))
 
 #Albuterol_data_2.5 <- Albuterol_data_2.5[order(as.Date(Albuterol_data_2.5$Effective_Date,format="%d/%m/%Y")),,drop=FALSE]
 #Albuterol_data_2.5[order(as.Date(Albuterol_data_2.5$Effective_Date, format="%d/%m/%Y")),, drop=FALSE]
 
 print(Albuterol_data_2.5) 
 
+print(Adderall)
 
-ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit)) + geom_line()
+ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(color = "blue") +
+    scale_x_date(date_labels = "%Y-%m", expand = c(0,10), breaks = date_breaks("3 months")) +
+    xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars per mL)") + labs(title = "Albuterol 2.5 mg/mL")
+
+
+ggplot(Adderall, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(color = "red") +
+  scale_x_date(date_labels = "%Y-%m", expand = c(0,10), breaks = date_breaks("3 months")) +
+  xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars Each)") + labs(title = "Adderall")
 
 # ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit)) + geom_line() +
 #  scale_x_date(format = "%b-%Y") + xlab("") + ylab("NADAC Per Unit")
-
 
 
 

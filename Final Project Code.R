@@ -5,6 +5,7 @@ library(stringr)
 library(lubridate)
 library(plyr)
 
+
 acquisition_data <- read_csv('NADAC__National_Average_Drug_Acquisition_Cost_.csv') # Important to note that this data is from 2013 - 2017.
 
 print(acquisition_data) # Determining the drugs that are being analyzed.
@@ -94,6 +95,5 @@ ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit)) + geom_line()
 #   filter(Manufacturer_Code == 76204, Product_Code == 0200) 
 
 #Albuterol_data_2.5 <- Adderall_data[Manufacturer_Code=="76204" & Product_Code=="0200" & Packaging_Code=="60"] # This line selects the exact Manufacturer_Code and the Product_Code 
-
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------

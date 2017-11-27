@@ -69,30 +69,48 @@ ggplot(Adderall, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(colo
   xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars Each)") + labs(title = "Adderall")
 
 # User input code
-
 Medicaidinput <- function()
 { 
   print("Hello, this program allows you to search drugs in this database using NDC numbers")
   m <- readline(prompt="Please enter the manufacturing code: ")
-  m <- as.integer(m)
+  toString(m)
   p <- readline(prompt="Please enter Product code: ")
   pa <- readline(prompt="Please enter Packaging code: ")
-  if (is.na(m)){
-    m <- Medicaidinput()
-  }
+  
+  m <- as.numeric(m)
+  m <- sprintf('%05d', m)
+  
+  p <- as.numeric(p)
+  p <- sprintf('%04d', p)
   
   print(paste("The NDC code that you have inputed is", m, "-", p, "-" , pa))
   
-    if (Working_data[Working_data$Manufacturer_Code == m, ] ){
-      print("Alright, we have found the drug that you were searching for.")
+  if (m %in% Working_data$Manufacturer_Code && p %in% Working_data$Product_Code && pa %in% Working_data$Packaging_Code){
+      print("Alright, we have found the drug that you were searching for.") # find out what %in% is.
+    
+      UserNDC <- Working_data %>%
+      filter(Manufacturer_Code == m, Product_Code == p, Packaging_Code == pa)
+      
+      UserNDC$Effective_Date <- mdy(UserNDC$Effective_Date)
+      UserNDC <- arrange(UserNDC , (Effective_Date))
+      usertitle <- unique(UserNDC$NDC_Description) # Unique identifies unique variables in vector, usertitle would not work if there 
+                                                   # More than one unique value.
+      
+      View(UserNDC)
+      
+      
+      graph <- ggplot(UserNDC, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(color = "yellow") +
+        scale_x_date(date_labels = "%Y-%m", expand = c(0,10), breaks = date_breaks("3 months")) +
+        xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars per mL)") + labs(title = usertitle)
+    
+      print(graph)
+    
     } else {
       print("Unfortunately, we could not find what you are looking for.")
-    }
+  }
   
   
   return(m)
-  return(p)
-  return(pa)
 }
 
 print(Medicaidinput())

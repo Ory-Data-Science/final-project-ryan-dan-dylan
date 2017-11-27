@@ -26,6 +26,9 @@ Manufacturer_Code <- substr(New_NDC, 0, 5) # Manufacturer's Code first 5 digits
 Product_Code <- substr(New_NDC, 6, 9) # Product Code, middle 4 digits
 Packaging_Code <- substr(New_NDC, 10, 11) # Packaging Code, each drug has an individual packaging code
 
+
+Working_data <- cbind(Adderall_data , New_NDC , Manufacturer_Code, Product_Code, Packaging_Code) # This will be used for the user input process
+
 Adderall_data <- cbind(Adderall_data , New_NDC , Manufacturer_Code, Product_Code, Packaging_Code) # Combines the two lines of code together.
 
 
@@ -64,6 +67,38 @@ ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom
 ggplot(Adderall, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(color = "red") +
   scale_x_date(date_labels = "%Y-%m", expand = c(0,10), breaks = date_breaks("3 months")) +
   xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars Each)") + labs(title = "Adderall")
+
+# User input code
+
+Medicaidinput <- function()
+{ 
+  print("Hello, this program allows you to search drugs in this database using NDC numbers")
+  m <- readline(prompt="Please enter the manufacturing code: ")
+  m <- as.integer(m)
+  p <- readline(prompt="Please enter Product code: ")
+  pa <- readline(prompt="Please enter Packaging code: ")
+  if (is.na(m)){
+    m <- Medicaidinput()
+  }
+  
+  print(paste("The NDC code that you have inputed is", m, "-", p, "-" , pa))
+  
+    if (Working_data[Working_data$Manufacturer_Code == m, ] ){
+      print("Alright, we have found the drug that you were searching for.")
+    } else {
+      print("Unfortunately, we could not find what you are looking for.")
+    }
+  
+  
+  return(m)
+  return(p)
+  return(pa)
+}
+
+print(Medicaidinput())
+
+
+
 
 # ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit)) + geom_line() +
 #  scale_x_date(format = "%b-%Y") + xlab("") + ylab("NADAC Per Unit")

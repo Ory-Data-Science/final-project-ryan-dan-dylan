@@ -37,7 +37,13 @@ Albuterol_data_2.5 <- Adderall_data %>%                                        #
   filter(Manufacturer_Code == "76204", Product_Code == "0200", Packaging_Code == "60")  # Filters the columns based on this 
 
 Adderall <- Adderall_data %>%
-  filter(Manufacturer_Code == "57844", Product_Code == "0110", Packaging_Code == "01")
+  filter(Manufacturer_Code == "57844", Product_Code == "0120")
+
+PenVK <- Adderall_data %>%
+  filter(Manufacturer_Code == "00093", Product_Code == "1174")
+
+Amox <- Adderall_data %>%
+  filter(Manufacturer_Code == "00781", Product_Code == "2613")
 
 
 # Albuterol_data_2.5[order(as.Date(Albuterol_data_2.5$Effective_Date , format="%d/%m/%Y")),,drop=FALSE]
@@ -48,6 +54,13 @@ Albuterol_data_2.5 <- arrange(Albuterol_data_2.5 , (Effective_Date))
 Adderall$Effective_Date <- mdy(Adderall$Effective_Date)
 Adderall <- arrange(Adderall , (Effective_Date))
 
+PenVK$Effective_Date <- mdy(PenVK$Effective_Date)
+PenVK <- arrange(PenVK , (Effective_Date))
+
+Amox$Effective_Date <- mdy(Amox$Effective_Date)
+Amox <- arrange(Amox , (Effective_Date))
+
+
 #Albuterol_data_2.5 <- Albuterol_data_2.5[order(as.Date(Albuterol_data_2.5$Effective_Date,format="%d/%m/%Y")),,drop=FALSE]
 #Albuterol_data_2.5[order(as.Date(Albuterol_data_2.5$Effective_Date, format="%d/%m/%Y")),, drop=FALSE]
 
@@ -55,14 +68,29 @@ print(Albuterol_data_2.5)
 
 print(Adderall)
 
+print(PenVK)
+
+print(Amox)
+
 ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(color = "blue") +
   scale_x_date(date_labels = "%Y-%m", expand = c(0,10), breaks = date_breaks("3 months")) +
-  xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars per mL)") + labs(title = "Drug Unit Prices", subtitle = "Albuterol 2.5 mg/mL")
-
+  xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars per mL)") + 
+  labs(title = "Drug Unit Prices", subtitle = "Albuterol 2.5 mg/mL")
 
 ggplot(Adderall, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(color = "red") +
   scale_x_date(date_labels = "%Y-%m", expand = c(0,50), breaks = date_breaks("3 months")) +
-  xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars Each)") + labs(title = "Drug Unit Prices", subtitle = "Adderall 10mg")
+  xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars Each)") + 
+  labs(title = "Drug Unit Prices", subtitle = "Adderall 20mg")
+
+ggplot(PenVK, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(color = "orange") +
+  scale_x_date(date_labels = "%Y-%m", expand = c(0,50), breaks = date_breaks("3 months")) +
+  xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars Each)") + 
+  labs(title = "Drug Unit Prices", subtitle = "Penicillin VK 500mg")
+
+ggplot(Amox, aes(Effective_Date, NADAC_Per_Unit, size = 2)) + geom_line(color = "green") +
+  scale_x_date(date_labels = "%Y-%m", expand = c(0,50), breaks = date_breaks("3 months")) +
+  xlab("Effective Date (Year-Month)") + ylab("NADAC Per Unit (Dollars Each)") + 
+  labs(title = "Drug Unit Prices", subtitle = "Amoxicillin 500mg")
 
 # ggplot(Albuterol_data_2.5, aes(Effective_Date, NADAC_Per_Unit)) + geom_line() +
 #  scale_x_date(format = "%b-%Y") + xlab("") + ylab("NADAC Per Unit")

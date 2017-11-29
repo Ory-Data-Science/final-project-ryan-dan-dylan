@@ -11,7 +11,7 @@ acquisition_data <- read_csv('NADAC__National_Average_Drug_Acquisition_Cost_.csv
 
 print(acquisition_data) # Determining the drugs that are being analyzed.
 
-
+# This is the final version 11/29/2017
 
 Adderall_data <- acquisition_data %>% # This data is going to separate Adderall from the other drugs to work with
   select(NDC_Description , Effective_Date, NADAC_Per_Unit, NDC)  %>%  #Select is used to choose the columns you want to work with

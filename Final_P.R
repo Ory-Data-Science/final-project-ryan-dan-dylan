@@ -9,40 +9,39 @@ library(ggplot2)
 
 acquisition_data <- read_csv('NADAC__National_Average_Drug_Acquisition_Cost_.csv') # Important to note that this data is from 2013 - 2017.
 
+
 print(acquisition_data) # Determining the drugs that are being analyzed.
 
 # This is the final version 11/29/2017
 
-Adderall_data <- acquisition_data %>% # This data is going to separate Adderall from the other drugs to work with
-  select(NDC_Description , Effective_Date, NADAC_Per_Unit, NDC)  %>%  #Select is used to choose the columns you want to work with
-  filter(str_detect(NDC_Description, "ADDERALL|AMOXICILLIN|ALBUTEROL|PENICILLIN"))  # You can add several drugs in this str_detect with this | symbol
+Sorted_data <- acquisition_data %>% # This data is going to separate Adderall from the other drugs to work with
+  select(NDC_Description , Effective_Date, NADAC_Per_Unit, NDC) #  %>%  #Select is used to choose the columns you want to work with
+#  filter(str_detect(NDC_Description, "ADDERALL|AMOXICILLIN|ALBUTEROL|PENICILLIN"))  # You can add several drugs in this str_detect with this | symbol
+# Line above is no longer necessary
 
 
-
-New_NDC <- str_pad(Adderall_data$NDC, 11 , pad = "0") #Makes all the strings 11 words long, not all manufaturer codes are 5 digits long
+New_NDC <- str_pad(Sorted_data$NDC, 11 , pad = "0") #Makes all the strings 11 words long, not all manufaturer codes are 5 digits long
 
 Manufacturer_Code <- substr(New_NDC, 0, 5) # Manufacturer's Code first 5 digits
 Product_Code <- substr(New_NDC, 6, 9) # Product Code, middle 4 digits
 Packaging_Code <- substr(New_NDC, 10, 11) # Packaging Code, each drug has an individual packaging code
 
-Adderall_data <- cbind(Adderall_data , New_NDC , Manufacturer_Code, Product_Code, Packaging_Code) # Combines the two lines of code together.
+Sorted_data <- cbind(Sorted_data , New_NDC , Manufacturer_Code, Product_Code, Packaging_Code) # Combines the two lines of code together.
 
 
-print(Adderall_data)
-
-#Albuterol_data_2.5 <- Adderall_data[Manufacturer_Code=="76204" & Product_Code=="0200" & Packaging_Code=="60"] # This line selects the exact Manufacturer_Code and the Product_Code 
+#Albuterol_data_2.5 <- Sorted_data[Manufacturer_Code=="76204" & Product_Code=="0200" & Packaging_Code=="60"] # This line selects the exact Manufacturer_Code and the Product_Code 
 
 
-Albuterol_data_2.5 <- Adderall_data %>%                                        # Defined array for one particular drug.
+Albuterol_data_2.5 <- Sorted_data %>%                                        # Defined array for one particular drug.
   filter(Manufacturer_Code == "76204", Product_Code == "0200", Packaging_Code == "60")  # Filters the columns based on this 
 
-Adderall <- Adderall_data %>%
+Adderall <- Sorted_data %>%
   filter(Manufacturer_Code == "57844", Product_Code == "0120")
 
-PenVK <- Adderall_data %>%
+PenVK <- Sorted_data %>%
   filter(Manufacturer_Code == "00093", Product_Code == "1174")
 
-Amox <- Adderall_data %>%
+Amox <- Sorted_data %>%
   filter(Manufacturer_Code == "00781", Product_Code == "2613")
 
 
@@ -107,17 +106,17 @@ Medicaidinput <- function()
   pa <- readline(prompt="Please enter Packaging code: ")
   
   m <- as.numeric(m)
-  m <- sprintf('%05d', m)
+  m <- sprintf('%05d', m) #Ensures that it matches database formatting
   
   p <- as.numeric(p)
   p <- sprintf('%04d', p)
   
   print(paste("The NDC code that you have inputed is", m, "-", p, "-" , pa))
   
-  if (m %in% Working_data$Manufacturer_Code && p %in% Working_data$Product_Code && pa %in% Working_data$Packaging_Code){
+  if (m %in% Sorted_data$Manufacturer_Code && p %in% Sorted_data$Product_Code && pa %in% Sorted_data$Packaging_Code){
     print("Alright, we have found the drug that you were searching for.") # find out what %in% is.
     
-    UserNDC <- Working_data %>%
+    UserNDC <- Sorted_data %>%
       filter(Manufacturer_Code == m, Product_Code == p, Packaging_Code == pa)
     
     UserNDC$Effective_Date <- mdy(UserNDC$Effective_Date)
@@ -135,7 +134,7 @@ Medicaidinput <- function()
     print(graph)
     
   } else {
-    print("Unfortunately, we could not find what you are looking for.")
+    print("Unfortunately, we could not find the drug that you are looking for in this database.")
   }
   
   
@@ -143,4 +142,5 @@ Medicaidinput <- function()
 }
 
 print(Medicaidinput())
+head(Sorted_data)
 
